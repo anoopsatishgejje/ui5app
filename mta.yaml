@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: nsui5app
+description: A Fiori application.
+version: 0.0.1
+modules:
+- name: nsui5app-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: nsui5app-destination-service
+    parameters:
+      content-target: true
+  - name: nsui5app-repo-host
+    parameters:
+      service-key:
+        name: nsui5app-repo-host-key
+  - name: nsui5app-uaa
+    parameters:
+      service-key:
+        name: nsui5app-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: nsui5app_html_repo_host
+          ServiceInstanceName: nsui5app-html5-srv
+          ServiceKeyName: nsui5app-repo-host-key
+          sap.cloud.service: nsui5app
+        - Authentication: OAuth2UserTokenExchange
+          Name: nsui5app_uaa
+          ServiceInstanceName: nsui5app-xsuaa-srv
+          ServiceKeyName: nsui5app-uaa-key
+          sap.cloud.service: nsui5app
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: nsui5app-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: nsui5app-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - nsui5app.zip
+      name: nsui5app
+      target-path: resources/
+- name: nsui5app
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: nsui5app-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: nsui5app-destination-service
+    service-plan: lite
+- name: nsui5app-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: nsui5app-xsuaa-srv
+    service-plan: application
+- name: nsui5app-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: nsui5app-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
