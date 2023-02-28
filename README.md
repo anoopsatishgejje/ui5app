@@ -19,7 +19,7 @@
 
 ## ui5app
 
-A Fiori application.
+A Fiori application to check the implementation of CI/CD.
 
 ### Starting the generated app
 
