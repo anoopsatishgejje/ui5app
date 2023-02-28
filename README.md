@@ -19,7 +19,7 @@
 
 ## ui5app
 
-A Fiori application to check the implementation of CI/CD pipeline.
+A Fiori application to check the implementation of CI/CD pipeline in SAP BTP.
 
 ### Starting the generated app
 
