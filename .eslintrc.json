@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "es6": true,
+        "jquery": true
+    },
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "globals": {
+      "sap": true,
+      "jQuery": true
+    },
+    "rules": {
+        "no-debugger": 1
+    }
+}

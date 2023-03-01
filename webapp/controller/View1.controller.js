@@ -9,7 +9,7 @@ sap.ui.define([
 
         return Controller.extend("ns.ui5app.controller.View1", {
             onInit: function () {
-
+                debugger;
             }
         });
     });
